@@ -21,6 +21,7 @@ void ParseEvent( HANDLE hEvent, FILE* pFile )
 	DWORD dwPropertyCount = 0;
 	LPWSTR pBuffer = NULL;
 
+	// Figure out how big of a buffer we need.
 	if( !EvtRender( NULL,
 					hEvent,
 					EvtRenderEventXml,
@@ -31,11 +32,13 @@ void ParseEvent( HANDLE hEvent, FILE* pFile )
 	{
 		if( ERROR_INSUFFICIENT_BUFFER == GetLastError() )
 		{
+			// Create the buffer.
 			dwBufferSize = dwBufferUsed;
 			pBuffer = (LPWSTR)malloc( dwBufferSize );
 
 			if( pBuffer )
 			{
+				// Render the actual event.
 				EvtRender( NULL,
 						   hEvent,
 						   EvtRenderEventXml,
@@ -59,6 +62,7 @@ void ParseEvent( HANDLE hEvent, FILE* pFile )
 		}
 	}
 
+	// Print the event to the file.
 	_ftprintf( pFile, _T("%s\n"), pBuffer );
 
 done:
